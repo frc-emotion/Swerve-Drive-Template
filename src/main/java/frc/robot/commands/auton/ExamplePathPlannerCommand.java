@@ -11,8 +11,8 @@ import frc.robot.subsystems.SwerveSubsytem;
 public class ExamplePathPlannerCommand extends ParallelCommandGroup {
     
     public ExamplePathPlannerCommand(SwerveSubsytem swerveSubsytem, PathPlannerTrajectory path){
-        Command swerveTrajectory = AutonSwerveController.executePath(swerveSubsytem, path);
-        
-        addCommands(swerveTrajectory);
+
+        addCommands(SwerveController.executePath(swerveSubsytem, path)
+        );
     }
 }

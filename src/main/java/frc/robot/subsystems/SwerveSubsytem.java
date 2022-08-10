@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -64,27 +65,39 @@ public class SwerveSubsytem extends SubsystemBase {
         gyro.reset();
     }
 
-    public double getHeading(){
+    public double getHeading() {
         return Math.IEEEremainder(gyro.getAngle(), 360);
     }
 
-    public Rotation2d getRotation2d(){
+    public Rotation2d getRotation2d() {
         return Rotation2d.fromDegrees(getHeading());
+    }
+
+    public Pose2d getPose(){
+        return odometry.getPoseMeters();
+    }
+
+    public void resetOdometry(Pose2d pose){
+        odometry.resetPosition(pose, getRotation2d());
     }
 
     @Override
     public void periodic() {
+        odometry.update(getRotation2d(), frontLeft.getState(), frontRight.getState(), backLeft.getState(),
+                backRight.getState());
+
         SmartDashboard.putNumber("Robot Heading", getHeading());
+
     }
 
-    public void stopModules(){
+    public void stopModules() {
         frontLeft.stop();
         frontRight.stop();
         backLeft.stop();
         backRight.stop();
     }
 
-    public void setModuleStates(SwerveModuleState[] desiredStates){
+    public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         frontLeft.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
@@ -92,4 +105,3 @@ public class SwerveSubsytem extends SubsystemBase {
         backRight.setDesiredState(desiredStates[3]);
     }
 }
-
