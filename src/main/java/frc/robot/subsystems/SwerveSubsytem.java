@@ -2,8 +2,10 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -45,6 +47,8 @@ public class SwerveSubsytem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
     private AHRS gyro = new AHRS(SPI.Port.kMXP);
+
+    private SwerveDriveOdometry odometry = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, new Rotation2d(0));
 
     public SwerveSubsytem() {
         new Thread(() -> {

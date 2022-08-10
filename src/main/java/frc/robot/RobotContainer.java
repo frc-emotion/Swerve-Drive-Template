@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.SwerveXboxCommand;
+import frc.robot.commands.auton.ExamplePathPlannerCommand;
 import frc.robot.subsystems.SwerveSubsytem;
 
 /**
@@ -51,6 +52,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return null;
+    return new ExamplePathPlannerCommand(swerveSubsytem, Robot.examplePath);
   }
 }
