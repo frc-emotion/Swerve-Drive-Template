@@ -83,7 +83,7 @@ public class SwerveModuleFalcon {
      * @param state
      */
     public void setDesiredState(SwerveModuleState state){
-        if (Math.abs(state.speedMetersPerSecond) < 0.001){
+        if (Math.abs(state.speedMetersPerSecond) < 0.3){
             stop();
             return;
         }
@@ -91,8 +91,6 @@ public class SwerveModuleFalcon {
         state = SwerveModuleState.optimize(state, getState().angle);
         driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
-
-        //Add Debug Here
     }
 
     public void stop(){

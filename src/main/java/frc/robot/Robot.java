@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
@@ -31,7 +32,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     //load Trajectories here
-    examplePath = PathPlanner.loadPath("ExamplePath", 8, 3);
+    examplePath = PathPlanner.loadPath("Sigma", 4, 3);
 
     m_robotContainer = new RobotContainer();
   }

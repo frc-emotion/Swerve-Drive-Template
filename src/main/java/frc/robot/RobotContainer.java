@@ -22,16 +22,17 @@ import frc.robot.subsystems.SwerveSubsytem;
 public class RobotContainer {
 
   private final SwerveSubsytem swerveSubsytem = new SwerveSubsytem();
-  private final XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
+  public static  XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
 
   public RobotContainer() {
     swerveSubsytem.setDefaultCommand(new SwerveXboxCommand(
     swerveSubsytem, 
-    () -> -driverController.getRawAxis(OIConstants.kDriverYAxis),
-    () -> driverController.getRawAxis(OIConstants.kDriverXAxis), 
-    () -> driverController.getRawAxis(OIConstants.kDriverRotAxis), 
-    () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx)));
- 
+    () -> driverController.getRawAxis(OIConstants.kDriverYAxis),
+    () ->  -driverController.getRawAxis(OIConstants.kDriverXAxis), 
+    () -> -driverController.getRawAxis(OIConstants.kDriverRotAxis), 
+    () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
+    () -> driverController.getLeftBumper(),
+    () -> driverController.getRightBumper()));
     configureButtonBindings();
   }
 
@@ -42,8 +43,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    //Swerve Bindings
     new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).whenPressed(() -> swerveSubsytem.zeroHeading());
+    //new JoystickButton(driverController, OIConstants.kDriverSlowButtonIdx).whenPressed(() -> swerveSubsytem.slowMode());
+    //new JoystickButton(driverController, OIConstants.kDriverTurboButtonIdx).toggleWhenPressed( newCswerveSubsytem.turboMode());
+    
   }
 
   /**
