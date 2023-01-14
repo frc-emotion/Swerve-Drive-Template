@@ -10,10 +10,10 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 /**
- * Organize subsystems by Shuffleboard Tabs and utilizeDebbger
+ * Organize subsystems by Shuffleboard Tabs and utilize WPILib Debbger
  * <br>
  * </br>
- * WIP
+ * @author Karan Thakkar
  */
 public class TabManager {
     private static TabManager instance;

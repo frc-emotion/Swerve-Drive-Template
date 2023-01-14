@@ -11,6 +11,11 @@ import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 
+
+/**
+ * Note: Uses analog absolute encoder instead of a CANCoder
+ * 
+ */
 public class SwerveModuleFalcon {
 
     private final WPI_TalonFX driveMotor;
