@@ -5,8 +5,8 @@
 package frc.robot;
 
 
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
+// import com.pathplanner.lib.PathPlanner;
+// import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,7 +22,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
 
-  public static PathPlannerTrajectory examplePath;
+  //public static PathPlannerTrajectory examplePath;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     //load Trajectories here
-    examplePath = PathPlanner.loadPath("Sigma", 4, 3);
+    //examplePath = PathPlanner.loadPath("Sigma", 4, 3);
 
     m_robotContainer = new RobotContainer();
   }
@@ -62,7 +62,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {

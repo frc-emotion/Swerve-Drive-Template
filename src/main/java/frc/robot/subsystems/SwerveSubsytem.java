@@ -2,18 +2,22 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.util.dashboard.TabManager;
@@ -63,7 +67,18 @@ public class SwerveSubsytem extends SubsystemBase {
 
     private AHRS gyro = new AHRS(SPI.Port.kMXP);
 
-    private SwerveDriveOdometry odometry = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, new Rotation2d(0));
+    private final SwerveModulePosition[] modulePositions =  new SwerveModulePosition[] {
+        frontLeft.getPosition(),
+        frontRight.getPosition(),
+        backLeft.getPosition(),
+        backRight.getPosition()
+    };
+
+    private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
+        DriveConstants.kDriveKinematics, 
+        new Rotation2d(0), //FIX why 0 & not getRotation2d? 
+        modulePositions,  
+        new Pose2d()); // FIX add the starting pose estimate? 
 
     private ChassisSpeeds robotSpeeds;
 
@@ -86,6 +101,15 @@ public class SwerveSubsytem extends SubsystemBase {
 
     }
 
+    public SwerveModulePosition[] getModulePositions() {
+        return new SwerveModulePosition[] {
+            frontLeft.getPosition(),
+            frontRight.getPosition(),
+            backLeft.getPosition(),
+            backRight.getPosition()
+        };
+    }    
+
     public void zeroHeading() {
         gyro.reset();
     }
@@ -94,16 +118,27 @@ public class SwerveSubsytem extends SubsystemBase {
         return Math.IEEEremainder(-gyro.getAngle(), 360);
     }
 
+    public double getPitch(){
+        return Units.degreesToRadians((gyro.getPitch()));
+    }
+
+    public double getRoll(){
+        return Units.degreesToRadians((gyro.getRoll()));
+    }
+    
     public Rotation2d getRotation2d() {
         return Rotation2d.fromDegrees(getHeading());
     }
 
     public Pose2d getPose(){
-        return odometry.getPoseMeters();
+        return poseEstimator.getEstimatedPosition();
     }
 
     public void resetOdometry(Pose2d pose){
-        odometry.resetPosition(pose, getRotation2d());
+        poseEstimator.resetPosition(
+            getRotation2d(), 
+            getModulePositions(),
+            pose);
     }
 
     public ChassisSpeeds getChassisSpeeds(){
@@ -117,10 +152,15 @@ public class SwerveSubsytem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        odometry.update(getRotation2d(), frontLeft.getState(), frontRight.getState(), backLeft.getState(),
-                backRight.getState());
+        poseEstimator.update(                   
+            getRotation2d(), 
+            getModulePositions());
 
-        m_field.setRobotPose(getPose());
+
+        SmartDashboard.putNumber("Gyro Reading", getHeading());
+        SmartDashboard.putNumber("Gyro Pitch", getPitch());
+        SmartDashboard.putNumber("Gyro Roll", getRoll());
+       // m_field.setRobotPose(getPose());
     }
 
     public void stopModules() {

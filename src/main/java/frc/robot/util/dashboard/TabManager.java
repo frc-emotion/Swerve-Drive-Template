@@ -1,5 +1,6 @@
 package frc.robot.util.dashboard;
 
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -56,7 +57,7 @@ public class TabManager {
         }
     }
 
-    public NetworkTableEntry addWidget(ShuffleboardTab tab, BuiltInWidgets widgetType, String name, Object defaultValue,
+    public GenericEntry addWidget(ShuffleboardTab tab, BuiltInWidgets widgetType, String name, Object defaultValue,
             int[] position, int[] size) {
         return tab.add(name, defaultValue)
                 .withPosition(position[0], position[1])
